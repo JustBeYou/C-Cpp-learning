@@ -41,11 +41,11 @@ TEST(Vector, CopyAndAccess) {
 TEST(Vector, PushAndPop) {
     selfmade::Vector<int> v;
     int check[] = {
-        -8, -7, -6, -4, -3, -2, -1, 0,
+        -8, -7, -6, -4, -3, -2, -1,
         1, 2, 3, 4, 5, 6, 7
     };
 
-    for (int i = 1; i < 10; i++) {
+    for (int i = 1; i <= 10; i++) {
         v.pushBack(i);
         v.pushFront(-i);
     }
@@ -63,7 +63,7 @@ TEST(Vector, PushAndPop) {
         v.popFront();
     }
 
-    for (int i = 0; i < 15; i++) {
+    for (int i = 0; i < 14; i++) {
         ASSERT_EQ(check[i], v[i]);
     }
 }
