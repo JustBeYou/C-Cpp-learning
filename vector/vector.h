@@ -2,6 +2,7 @@
 #define VECTOR_H
 
 #include <cstddef>
+#include <new>
 
 namespace selfmade {
 
@@ -15,10 +16,14 @@ class Vector {
         std::size_t mCapacity;
     public:
         Vector() {
-
+            
         }
 
         Vector(const Vector<type>& aInstance) {
+
+        }
+
+        Vector<type>& operator=(const Vector<type>& aObject) {
 
         }
 
