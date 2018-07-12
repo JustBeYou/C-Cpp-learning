@@ -1,8 +1,7 @@
 #ifndef VECTOR_H
 #define VECTOR_H
 
-#include <iostream>
-
+#include <cstring>
 #include <cstddef>
 #include <cmath>
 #include <new>
@@ -48,6 +47,14 @@ class Vector {
             mCapacity = max(n, gMinVectorCapacity);
             mSize = aSize;
             mVector = new type[mCapacity];
+        }
+
+        void fixSize() {
+            if (mSize == mCapacity) {
+                resize(mCapacity * 2);
+            } else if (mSize <= mCapacity / 4 and mCapacity > gMinVectorCapacity) {
+                resize(mCapacity / 2);
+            }
         }
     public:
         Vector() {
@@ -132,28 +139,49 @@ class Vector {
 
 
         void pushFront(const type& aObject) {
-
+            for (std::size_t i = mSize++; i > 0; i--) {
+                mVector[i] = mVector[i - 1];
+            }
+            mVector[0] = aObject;
+            fixSize();
         }
 
         void pushBack(const type& aObject) {
-
+            mVector[mSize++] = aObject;
+            fixSize();
         }
 
         void insert(std::size_t aIndex, const type& aObject) {
-
+            for (std::size_t i = mSize++; i > aIndex; i--) {
+                mVector[i] = mVector[i - 1];
+            }
+            mVector[aIndex] = aObject;
+            fixSize();
         }
 
         
         type popFront() {
-
+            size_t ret = mVector[0];
+            for (std::size_t i = 0; i < mSize - 1; i++) { 
+                mVector[i] = mVector[i + 1];
+            }
+            mSize--;
+            fixSize();
+            return ret;
         }
 
         type popBack() {
-
+            type ret = mVector[--mSize];
+            fixSize();
+            return ret;
         }
 
         void remove(std::size_t aIndex) {
-
+            for (std::size_t i = aIndex; i < mSize - 1; i++) {
+                mVector[i] = mVector[i + 1];
+            }
+            mSize--;
+            fixSize();
         }
 
 
@@ -166,7 +194,13 @@ class Vector {
         }
 
         void resize(std::size_t aCapacity) {
-
+            size_t newCapacity = helper_nearestTwoPow(aCapacity);
+            type* newContainer = new type[newCapacity];
+            
+            memcpy(newContainer, mVector, mSize * sizeof(type));
+            mCapacity = newCapacity;
+            delete[] mVector;
+            mVector = newContainer;
         }
 
 };
