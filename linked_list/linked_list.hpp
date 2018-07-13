@@ -23,28 +23,26 @@ template<typename type>
 class Node {
     private:
         Node<type>* mNext;
-        type* mData;
+        type mData;
     public:
         Node() {
             mNext = nullptr;
-            mData = nullptr;
         }
 
-        explicit Node(Node<type>* aNext) {
+        explicit Node(const Node<type>* aNext) {
             mNext = aNext;
-            mData = nullptr;
         }
 
-        Node(Node<type>* aNext, type* aData) {
+        Node(const Node<type>* aNext, const type& aData) {
             mNext = aNext;
             mData = aData;
         }
 
-        Node<type>* getNext() const {
+        const Node<type>* getNext() const {
             return mNext;
         }
 
-        type* getData() const {
+        const type& getData() const {
             return mData;
         }
 
@@ -52,7 +50,7 @@ class Node {
             mNext = aNext;
         }
 
-        void setData(type* aData) {
+        void setData(const type& aData) {
             mData = aData;
         }
 
@@ -61,17 +59,11 @@ class Node {
                 delete mNext;
                 mNext = nullptr;
             }
-
-            if (mData != nullptr) {
-                delete mData;
-                mData = nullptr;
-            }
         }
 
         ~Node() {
             destroy();
         }
-
 };
 
 template<typename type>
@@ -111,7 +103,64 @@ class LinkedList {
         }
 
         const type& operator[](size_t aIndex) const {
-            
+            if (aIndex >= mSize) { 
+                throw LinkedListException("Index out of range");
+            }
+            Node<type>* node;
+            size_t id = 0;
+
+            for (node = mTail;
+                 node->next != nullptr;
+                 node = node->next, id++) {
+                if (id == aIndex) {
+                    break;
+                }
+            }
+
+            return node->getData(); 
+        }
+
+        void insert(size_t aIndex, const type& aObject) {
+
+        }
+
+        void pushBack(const type& aObject) {
+        }
+
+        void pushFront(const type& aObject) {
+
+        }
+
+        void remove(const type& aObject) {
+
+        }
+
+        void erase(size_t aIndex) {
+
+        }
+
+        type popBack() {
+        
+        }
+
+        type popFront() {
+
+        }
+
+        const type& front() const {
+
+        }
+
+        const type& back() const {
+
+        }
+
+        size_t find(const type& aObject) {
+
+        }
+
+        void reverse() {
+
         }
 };
 
