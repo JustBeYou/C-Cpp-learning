@@ -65,14 +65,39 @@ class LinkedList {
     private:
         Node<type>* mTail;
         size_t mSize;
+
+        void destroy() {
+            Node<type>* node = mTail;
+            Node<type>* temp = nullptr;
+            while (node != nullptr) {
+                temp = node->next;
+                delete node;
+                node = temp;
+            }
+
+            mTail = nullptr;
+            mSize = 0;
+        }
     public:
         LinkedList() {
             mTail = nullptr;
             mSize = 0;
         }
 
+        ~LinkedList() {
+            destroy();
+        }
+
         size_t getSize() const {
             return mSize;
+        }
+
+        bool isEmpty() const {
+            return mSize == 0;
+        }
+
+        const type& operator[](size_t aIndex) const {
+            
         }
 };
 
