@@ -38,7 +38,7 @@ class Node {
             mData = aData;
         }
 
-        const Node<type>* getNext() const {
+        Node<type>* getNext() const {
             return mNext;
         }
 
@@ -76,7 +76,7 @@ class LinkedList {
             Node<type>* node = mTail;
             Node<type>* temp = nullptr;
             while (node != nullptr) {
-                temp = node->next;
+                temp = node->getNext();
                 delete node;
                 node = temp;
             }
@@ -110,8 +110,8 @@ class LinkedList {
             size_t id = 0;
 
             for (node = mTail;
-                 node->next != nullptr;
-                 node = node->next, id++) {
+                 node->getNext() != nullptr;
+                 node = node->getNext(), id++) {
                 if (id == aIndex) {
                     break;
                 }
