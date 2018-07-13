@@ -54,6 +54,18 @@ TEST(LinkedList, FullTesting) {
         ASSERT_EQ(check[i], mylist[i]);
     }
 
+
+    int i = 0;
+    for (selfmade::LinkedList<int>::iterator it = mylist.begin();
+         it != mylist.end();
+         ++it) {
+        std::cout << "Index " << i << " -> " << *it << std::endl;
+        i++;
+    }
+
+    for (auto& elem: mylist) {
+        std::cout << elem << std::endl; 
+    }
 }
 
 int main(int argc, char **argv) {
