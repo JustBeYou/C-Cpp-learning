@@ -2,8 +2,22 @@
 #define LINKED_LIST_H
 
 #include <cstddef>
+#include <exception>
+#include <string>
 
 namespace selfmade {
+
+class LinkedListException final : public std::exception {
+    private:
+        std::string mMsg;
+    public:
+        explicit LinkedListException(const std::string& aMsg): mMsg(aMsg) {
+        }
+
+        const char* what() const noexcept override {
+            return mMsg.c_str();
+        }
+};
 
 template<typename type>
 class Node {
