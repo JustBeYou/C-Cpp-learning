@@ -3,6 +3,7 @@
 
 #include <cstddef>
 #include <exception>
+#include <iterator>
 #include <string>
 
 namespace selfmade {
@@ -250,6 +251,67 @@ class LinkedList {
 
         void reverse() {
 
+        }
+
+        class iterator {
+            private:
+                Node<type>* mNode;
+
+                class NodeHolder {
+                    Node<type>* mNode;
+                    public:
+                        explicit NodeHolder(Node<type>* aNode): mNode(aNode) {}
+                        const type& operator*() {
+                            return mNode->getData();
+                        }
+                };
+            public:
+                typedef Node<type>*             value_type;
+                typedef std::ptrdiff_t          difference_type;
+                typedef Node<type>**            pointer;
+                typedef Node<type>*&            reference;
+                typedef std::input_iterator_tag iterator_category;
+
+                iterator() {
+                    mNode = nullptr;
+                }
+
+                explicit iterator(Node<type>* aNode): mNode(aNode) {}
+                
+                const type& operator*() const {
+                    return mNode->getData();
+                }
+
+                bool operator==(const iterator& other) const {
+                    return mNode == other.mNode;
+                }
+
+                bool operator!=(const iterator& other) const {
+                    return mNode != other.mNode;
+                }
+
+                NodeHolder operator++(int) {
+                    NodeHolder ret(mNode);
+                    if (mNode != nullptr) {
+                        mNode = mNode->getNext();
+                    }
+                    return ret;
+                }
+
+                iterator& operator++() {
+                    if (mNode != nullptr) {
+                        mNode = mNode->getNext();
+                    }
+                    return *this;
+                }
+        };
+
+        iterator begin() {
+            return iterator(mHead);
+        }
+
+        iterator end() {
+            return iterator(nullptr);
         }
 };
 
