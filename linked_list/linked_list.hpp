@@ -29,11 +29,11 @@ class Node {
             mNext = nullptr;
         }
 
-        explicit Node(const Node<type>* aNext) {
+        explicit Node(Node<type>* aNext) {
             mNext = aNext;
         }
 
-        Node(const Node<type>* aNext, const type& aData) {
+        Node(Node<type>* aNext, const type& aData) {
             mNext = aNext;
             mData = aData;
         }
@@ -56,7 +56,6 @@ class Node {
 
         void destroy() {
             if (mNext != nullptr) {
-                delete mNext;
                 mNext = nullptr;
             }
         }
@@ -69,11 +68,11 @@ class Node {
 template<typename type>
 class LinkedList {
     private:
-        Node<type>* mTail;
+        Node<type>* mHead;
         size_t mSize;
 
         void destroy() {
-            Node<type>* node = mTail;
+            Node<type>* node = mHead;
             Node<type>* temp = nullptr;
             while (node != nullptr) {
                 temp = node->getNext();
@@ -81,12 +80,12 @@ class LinkedList {
                 node = temp;
             }
 
-            mTail = nullptr;
+            mHead = nullptr;
             mSize = 0;
         }
     public:
         LinkedList() {
-            mTail = nullptr;
+            mHead = nullptr;
             mSize = 0;
         }
 
@@ -109,7 +108,7 @@ class LinkedList {
             Node<type>* node;
             size_t id = 0;
 
-            for (node = mTail;
+            for (node = mHead;
                  node->getNext() != nullptr;
                  node = node->getNext(), id++) {
                 if (id == aIndex) {
@@ -121,14 +120,57 @@ class LinkedList {
         }
 
         void insert(size_t aIndex, const type& aObject) {
+            if (aIndex >= mSize) { 
+                throw LinkedListException("Index out of range");
+            }
 
+            if (aIndex == 0) {
+                pushFront(aObject);
+                return ;
+            }
+
+            if (aIndex == mSize) {
+                pushBack(aObject);
+                return ;
+            }
+
+            Node<type>* node = nullptr;
+            Node<type>* last = nullptr;
+            size_t id = 0;
+
+            for (node = mHead;
+                 node->getNext() != nullptr;
+                 last = node, node = node->getNext(), id++) {
+                if (id == aIndex) {
+                    break;
+                }
+            }
+
+            Node<type>* new_node = new Node<type>(node, aObject);
+            last->setNext(new_node);
+            mSize++;
         }
 
         void pushBack(const type& aObject) {
+            if (mHead == nullptr) {
+                pushFront(aObject);
+                return ;
+            }
+
+            Node<type>* node = mHead;
+            while (node->getNext() != nullptr) {
+                node = node->getNext();
+            }
+
+            Node<type>* new_node = new Node<type>(nullptr, aObject);
+            node->setNext(new_node);
+            mSize++;
         }
 
         void pushFront(const type& aObject) {
-
+            Node<type>* new_node = new Node<type>(mHead, aObject);
+            mHead = new_node;
+            mSize++;
         }
 
         void remove(const type& aObject) {
@@ -136,7 +178,35 @@ class LinkedList {
         }
 
         void erase(size_t aIndex) {
+            if (aIndex >= mSize) { 
+                throw LinkedListException("Index out of range");
+            }
 
+            if (aIndex == 0) {
+                popFront();
+                return ;
+            }
+
+            if (aIndex == mSize - 1) {
+                popBack();
+                return ;
+            }
+
+            Node<type>* node = nullptr;
+            Node<type>* last = nullptr;
+            size_t id = 0;
+
+            for (node = mHead;
+                 node->getNext() != nullptr;
+                 last = node, node = node->getNext(), id++) {
+                if (id == aIndex) {
+                    break;
+                }
+            }
+
+            last->setNext(node->getNext());
+            delete node;
+            mSize--;
         }
 
         type popBack() {
@@ -144,15 +214,34 @@ class LinkedList {
         }
 
         type popFront() {
+            Node<type>* node = mHead;
+            mHead = mHead->getNext();
+            type data = node->getData();
+            delete node;
+            mSize--;
 
+            return data;
         }
 
         const type& front() const {
+            if (mHead == nullptr) {
+                throw LinkedListException("Empty list");
+            }
 
+            return mHead->getData();
         }
 
         const type& back() const {
+            if (mHead == nullptr) {
+                throw LinkedListException("Empty list");
+            }
 
+            Node<type>* node = mHead;
+            while (node->getNext() != nullptr) {
+                node = node->getNext();
+            }
+
+            return node->getData();
         }
 
         size_t find(const type& aObject) {
