@@ -3,6 +3,13 @@
 #include "linked_list.hpp"
 #include "gtest/gtest.h"
 
+void show(selfmade::LinkedList<int>& list) {
+    for (int i = 0; i < list.getSize(); i++) {
+        std::cout << list[i] << " ";
+    }
+    std::cout << std::endl; 
+}
+
 TEST(LinkedList, FullTesting) {
     selfmade::LinkedList<int> mylist;
 
@@ -23,15 +30,19 @@ TEST(LinkedList, FullTesting) {
 
     for (int i = 1; i <= 10; i++) {
         mylist.pushBack(i);
+        show(mylist);
         mylist.pushFront(-i);
+        show(mylist);
     }
 
     for (int i = 0; i < 3; i++) {
         mylist.insert(i, 0);
+        show(mylist);
     }
 
     for (int i = 0; i < 3; i++) {
         mylist.erase(i * 3);
+        show(mylist);
     }
 
     for (int i = 0; i < 3; i++) {
