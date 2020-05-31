@@ -17,6 +17,18 @@ bool IsDerivedFrom() {
     return IsDerivedFromHelper<C, P>::Is;
 }
 
+/* Another (more elegant) solution */
+template <class P>
+class Is {
+    static constexpr bool Test( P* )  { return true ; }
+    static constexpr bool Test( ... ) { return false; }
+public:
+    template <class C>
+    static constexpr bool ParentOf() {
+        return Test(static_cast<C*>(nullptr));
+    }
+};
+
 
 /* Testing */
 class Base {};
@@ -27,4 +39,7 @@ int main()
 {
     cout << IsDerivedFrom<Child, Base>() << endl;
     cout << IsDerivedFrom<Test, Base>() << endl;
+    
+    cout << Is<Base>::ParentOf<Child>() << endl;
+    cout << Is<Base>::ParentOf<Test>() << endl;
 }
