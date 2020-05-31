@@ -9,7 +9,7 @@ class IsDerivedFromHelper
     static constexpr bool Test( B* ) { return true; }
     static constexpr bool Test( ... ) { return false; }
 public:
-    static constexpr bool Is = Test(static_cast<D*>(0));
+    static constexpr bool Is = Test(static_cast<D*>(nullptr));
 };
 
 template <class C, class P> 
