@@ -29,6 +29,12 @@ public:
     }
 };
 
+/* A, B product problem */
+void F(const int A[], int B[], unsigned int N) {
+    long long int product = 1LL;
+    for (unsigned int i = 0; i < N; ++i) product *= A[i];
+    for (unsigned int j = 0; j < N; ++j) B[j] = product / A[j];
+}
 
 /* Testing */
 class Base {};
@@ -42,4 +48,12 @@ int main()
     
     cout << Is<Base>::ParentOf<Child>() << endl;
     cout << Is<Base>::ParentOf<Test>() << endl;
+    
+    int A[] = {2, 1, 5, 9};
+    int B[] = {0, 0, 0, 0};
+    F(A, B, 4);
+    for (unsigned int i = 0; i < 4; ++i) {
+        cout << B[i] << " ";   
+    }
+    cout << endl;
 }
